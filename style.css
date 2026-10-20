@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: #fce4ec; /* Nền trang web màu hồng phấn */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.game-container {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(233, 30, 99, 0.15);
+  text-align: center;
+}
+
+h1 {
+  color: #d81b60;
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.score-board {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #ad1457;
+  font-weight: bold;
+}
+
+canvas {
+  background-color: #ffeef2; /* Khung sân chơi màu hồng dịu mát */
+  border: 4px solid #ff4081;   /* Viền khung màu hồng cánh sen */
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto;
+}
+
+.controls-hint {
+  margin-top: 16px;
+  color: #880e4f;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 12px;
+  padding: 9px 24px;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(255, 64, 129, 0.3);
+}
+
+button:hover {
+  background-color: #e91e63;
+}

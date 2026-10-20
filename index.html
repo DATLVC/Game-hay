@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chó Đi Tìm Xương</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <h1><img src="ban.png" alt="ban" style="width: 32px; height: 32px; border-radius: 50%; vertical-align: middle; margin-right: 8px;"> 20/10 CÓ NGƯỜI THEO ĐUỔI 💃
+      <div class="score-board">
+      <span>Điểm: <b id="score">0</b></span>
+      <span>Kỷ lục: <b id="high-score">0</b></span>
+    </div>
+
+    <!-- Màn hình game 400x400 px -->
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <div class="controls-hint">
+      <p>Dùng các phím mũi tên <b>⬆ ⬇ ⬅ ➡</b> hoặc <b>W A S D</b> để di chuyển</p>
+      <button id="restartBtn">Chơi Lại</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
