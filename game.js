@@ -14,9 +14,14 @@ laughImg.src = "cuoi.png"; // Ảnh mặt cười nhe răng
 const dancerImg = new Image();
 dancerImg.src = "dancer.png";
 
+// Nạp ảnh khi khóc / thua cuộc
+const cryImg = new Image();
+cryImg.src = "khoc.png";
+
 // Kích thước ô lưới
-const gridSize = 25; 
-const tileCount = canvas.width / gridSize; // 400 / 25 = 16 ô
+const gridSize = 30
+; 
+const tileCount = canvas.width / gridSize; // 450 / 30 = 15 ô
 
 // Trạng thái game
 let snake = [];
@@ -26,6 +31,11 @@ let dy = 0;
 let score = 0;
 let highScore = localStorage.getItem("pursuitLaughScore") || 0;
 highScoreEl.innerText = highScore;
+
+// Nạp nhạc nền
+const bgMusic = new Audio("nhac.mp3");
+bgMusic.loop = true;   // Bật tính năng tự lặp lại bài hát khi hết
+bgMusic.volume = 0.5;  // Âm lượng 50% vừa nghe
 
 // Biến lưu số lượng đốt cần mọc thêm khi ăn
 let growCount = 0;
@@ -128,6 +138,8 @@ function draw() {
   ctx.fillText("🌷", 15, canvas.height - 15);
   ctx.fillText("💕", canvas.width - 15, canvas.height - 15);
 
+for (let x = 0; x <= canvas.width; x += gridSize) for (let y = 0; y <= canvas.height; y += gridSize) ctx.strokeStyle = "rgba(249, 120, 163, 0.1)", ctx.strokeRect(x, y, gridSize, gridSize);
+
   // 1. VẼ MỤC TIÊU DANCER.PNG
   const targetX = target.x * gridSize;
   const targetY = target.y * gridSize;
@@ -143,9 +155,9 @@ function draw() {
 
   // 2. VẼ ĐẦU BAN.PNG VÀ THÂN MẶT CƯỜI CUOI.PNG
   snake.forEach((segment, index) => {
-    const centerX = segment.x * gridSize + gridSize / 2;
-    const centerY = segment.y * gridSize + gridSize / 2;
-    const radius = gridSize / 2;
+    const centerX = segment.x * gridSize + gridSize / 1.75;
+    const centerY = segment.y * gridSize + gridSize / 1.75;
+    const radius = gridSize / 1.85;
 
     if (index === 0) {
       // Đầu là ảnh ban.png bo tròn viền hồng
@@ -156,10 +168,10 @@ function draw() {
         ctx.clip();
         ctx.drawImage(
           friendHeadImg, 
-          segment.x * gridSize, 
+          segment.x *  gridSize , 
           segment.y * gridSize, 
-          gridSize, 
-          gridSize
+          gridSize + 7, 
+          gridSize + 7
         );
         ctx.restore();
 
@@ -194,22 +206,99 @@ function draw() {
   });
 
   // Màn hình Game Over
+// MÀN HÌNH GAME OVER (CHỨA ẢNH KHÓC)
   if (isGameOver) {
-    ctx.fillStyle = "rgba(173, 20, 87, 0.8)";
+    ctx.fillStyle = "rgba(173, 20, 87, 0.85)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 24px sans-serif";
-    ctx.fillText("GAME OVER!", canvas.width / 2, canvas.height / 2 - 15);
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-    ctx.font = "15px sans-serif";
-    ctx.fillText("Bấm 'Chơi Lại' để theo đuổi tiếp", canvas.width / 2, canvas.height / 2 + 20);
+    // Vẽ ảnh khóc (kích thước 90x90px)
+    if (cryImg.complete && cryImg.naturalWidth !== 0) {
+      ctx.drawImage(cryImg, 0, 0, canvas.width, canvas.height);
+      ctx.restore();
+
+      // Phủ một lớp màu tối mờ 35% để chữ phía trên nổi bật và dễ đọc
+      ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Viền trắng quanh ảnh khóc
+      const imgSize = 80;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY - 845, imgSize / 2, 0, Math.PI * 2);
+      ctx.lineWidth = 0;
+      ctx.strokeStyle = "#ffffff";
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      ctx.font = "60px sans-serif";
+      ctx.fillText("😭", centerX, centerY - 45);
+    }
+
+    // Chữ thông báo
+// Dòng chữ HỒI CHIỀU TRỜI MƯA
+    ctx.font = "900 32px sans-serif";
+    ctx.strokeStyle = "#000000"; // Viền chữ đen dày
+    ctx.lineWidth = 5;
+    ctx.strokeText("HỒI CHIỀU TRỜI MƯA!", centerX, centerY - 0);
+
+    ctx.fillStyle = "#e10b0b";   // Màu chữ vàng rực rỡ
+    ctx.fillText("HỒI CHIỀU TRỜI MƯA!", centerX, centerY - 0);
   }
+
+
+ window.addEventListener("keydown", (e) => {
+  // Tự động phát nhạc ở lần bấm phím đầu tiên nếu nhạc chưa chạy
+  if (bgMusic.paused) {
+    bgMusic.play().catch(() => {});
+  }
+
+  const key = e.key;
+  if ((key === "ArrowUp" || key === "w" || key === "W") && dy === 0) {
+    dx = 0;
+    dy = -1;
+  } else if ((key === "ArrowDown" || key === "s" || key === "S") && dy === 0) {
+    dx = 0;
+    dy = 1;
+  } else if ((key === "ArrowLeft" || key === "a" || key === "A") && dx === 0) {
+    dx = -1;
+    dy = 0;
+  } else if ((key === "ArrowRight" || key === "d" || key === "D") && dx === 0) {
+    dx = 1;
+    dy = 0;
+  }
+});
 }
 
+function initGame() {
+  snake = [
+    { x: 5, y: 5 },
+    { x: 4, y: 5 },
+    { x: 3, y: 5 }
+  ];
+  dx = 1;
+  dy = 0;
+  score = 0;
+  growCount = 0;
+  isGameOver = false;
+  scoreEl.innerText = score;
+  spawnTarget();
+
+  // Bật nhạc (hoặc tiếp tục phát nếu đang tạm dừng)
+  bgMusic.play().catch(() => {});
+  
+  if (gameInterval) clearInterval(gameInterval);
+  gameInterval = setInterval(gameLoop, 180);
+}
 function gameOver() {
   isGameOver = true;
   clearInterval(gameInterval);
+  
+  // Tạm dừng nhạc khi thua
+  bgMusic.pause();
+  
   draw();
 }
 
