@@ -145,12 +145,12 @@ for (let x = 0; x <= canvas.width; x += gridSize) for (let y = 0; y <= canvas.he
   const targetY = target.y * gridSize;
 
   if (dancerImg.complete && dancerImg.naturalWidth !== 0) {
-    ctx.drawImage(dancerImg, targetX - 2, targetY - 2, gridSize + 4, gridSize + 4);
+    ctx.drawImage(dancerImg, targetX - 0, targetY - 0, gridSize - 0.5, gridSize - 0.5);
     ctx.font = "10px sans-serif";
     ctx.fillText("✨", targetX + gridSize, targetY);
   } else {
     ctx.font = "20px sans-serif";
-    ctx.fillText("💃", targetX + gridSize / 2, targetY + gridSize / 2);
+    ctx.fillText("💃", targetX + gridSize / 0, targetY + gridSize / 0);
   }
 
   // 2. VẼ ĐẦU BAN.PNG VÀ THÂN MẶT CƯỜI CUOI.PNG
